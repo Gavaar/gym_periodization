@@ -1,0 +1,15 @@
+.GymPeriodizator {
+    --main-light: #ce1c1ca8;
+    --contrast: #fff;
+}
+
+.GymPeriodizator_exercise {
+    display: flex;
+    max-width: 16rem;
+    justify-content: space-between;
+}
+
+.full-center {
+    display: flex;
+    justify-content: center;
+}
