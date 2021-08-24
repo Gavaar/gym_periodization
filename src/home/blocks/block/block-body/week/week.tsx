@@ -15,7 +15,9 @@ function ExerciseByWeek({ exerciseName, modifier, weight, weekSuccess }: WeekCon
     return (
         <div className="Block__week">
             <strong className="Block__week-exercise">{ exerciseName }</strong>
-            <i className="Block__week-weight">{startingWeight} - {endingWeight} Kg</i>
+            <i className="Block__week-weight">
+                <span>{startingWeight} - {endingWeight} Kg</span>
+            </i>
             <div className="Block__week-successes">
                 { weekChecks.map((el, i) => <span key={i}>{el}</span>) }
             </div>

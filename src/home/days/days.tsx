@@ -12,7 +12,7 @@ import { HomeProvider } from 'home/__states';
 export default function Days(): JSX.Element {
     const days = useContext(DayContextProvider);
     const [selectedDay, onSelectDay] = useContext(SelectedDayProvider);
-    const [blockIds, setBlock] = useContext(HomeProvider);
+    const [blockIds, setBlockIds] = useContext(HomeProvider);
 
     const onDeleteDay = (id: number) => {
         if (window.confirm(`Are you sure to delete day #${id}?`)) {   
@@ -23,7 +23,7 @@ export default function Days(): JSX.Element {
             if (block) {
                 dayStore.delete(id);
                 blockStore.update(block.id, { ...block, day_ids: block.day_ids.filter(d => d !== id)});
-                setBlock([...blockIds]);
+                setBlockIds([...blockIds]);
             }   
         }
     }

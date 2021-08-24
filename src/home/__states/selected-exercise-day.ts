@@ -11,7 +11,7 @@ export function useSelectedExerciseDay({ selectedDay, selectedBlock }: { selecte
 
     useEffect(() => {
         const day = days.find(day => day.id === selectedDay) || days[days.length - 1];
-        const block = blocks.find(block => block?.id === selectedBlock) || blocks[blocks.length - 1];
+        const block = blocks.find(block => block.id === selectedBlock) || blocks[blocks.length - 1];
         setExDay({ day, block });
     }, [selectedDay, selectedBlock, blocks, days]);
 

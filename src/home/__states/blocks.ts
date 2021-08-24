@@ -6,6 +6,9 @@ function addNewBlockWhenLastIsFull(blocks: ExerciseBlock[]): ExerciseBlock[] {
     const { length } = blocks;
     const lastBlock = blocks[length - 1];
 
+    if (!length) {
+        blocks.push(new NewExerciseBlock());
+    }
     if (lastBlock?.day_ids.length >= 12) {
         const { exercise_configuration } = lastBlock;
         blocks.push(new NewExerciseBlock(exercise_configuration));
@@ -29,6 +32,7 @@ export function useBlocks(ids: number[]): ExerciseBlock[] {
     const [blocks, setBlocks] = useState<ExerciseBlock[]>([]);
 
     useEffect(() => {
+        console.log({ ids });
         const idPromises = ids.map(id => getBlock(id));
         Promise.all(idPromises).then(blocks => {
             setBlocks(addNewBlockWhenLastIsFull(blocks));

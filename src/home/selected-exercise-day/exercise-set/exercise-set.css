@@ -2,30 +2,33 @@
     flex: 3 0 20rem;
     overflow-y: auto;
     max-height: 100%;
+    padding: 0 0.5rem;
 }
 
 .ExerciseSet__title {
     display: flex;
     justify-content: space-between;
     margin: 0.25rem;
+    font-size: 1rem;
+    text-align: center;
 }
 
 .ExerciseSet__title-child {
     flex: 1 0 0;
 }
 
-.ExerciseSet__date-input {
+.ExerciseSet__input {
     background: transparent;
     border: 0;
-    font-size: 1.17rem;
+    padding: 0;
+    font-size: 1rem;
     font-weight: 700;
     flex: 1 0 0;
     text-align: end;
     min-width: 0;
     outline-color: var(--main-light);
 }
-
-.ExerciseSet__date-input:hover {
+.ExerciseSet__input:hover {
     box-shadow: 0px 4px 3px -3px var(--main);
     transition: 0.2s;
 }
@@ -33,6 +36,14 @@
 .ExerciseSet__reps {
     display: flex;
     flex-flow: column nowrap;
+}
+
+.ExerciseSet__exercise-info {
+    display: flex;
+}
+
+.ExerciseSet__exercise-info > * {
+    flex: 1 0 0;
 }
 
 .ExerciseSet__reps-exercise {
