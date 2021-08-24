@@ -15,6 +15,15 @@ function repGoalForWeek(week: number): number {
             return 6;
     }
 }
+function serieGoalForExerciseInWeek(ex: Exercises, week: number): number {
+    if (ex === 'deadlift') {
+        return 1;
+    }
+    if (week === 4) {
+        return 3;
+    }
+    return 5;
+}
 export default function buildNewDay({ previousDay, week }: { previousDay?: ExerciseDay; week: number }): NewDay {
     const exercises = ((): [Exercises, Exercises, Exercises] => {
         if (previousDay?.exercises.deadlift) {
@@ -24,7 +33,7 @@ export default function buildNewDay({ previousDay, week }: { previousDay?: Exerc
     })();
 
     const seriesGoal = exercises.reduce((goal, ex) => {
-        goal[ex] = ex === 'deadlift' ? 1 : 5;
+        goal[ex] = serieGoalForExerciseInWeek(ex, week);
         return goal;
     }, {} as { [exercise in Exercises]: number });
 
