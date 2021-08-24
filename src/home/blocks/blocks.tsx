@@ -11,11 +11,12 @@ function Blocks(): JSX.Element {
     return (
         <div className="Blocks">
             {blocks.map((_block, index) => {
-                return (
+                if (_block) return (
                     <div onClick={() => onSelect(_block.id)} key={index}>
                         <Block block={_block} selected={_block.id === selected}/>
                     </div>
                 );
+                return <span>loading...</span>
             })}
         </div>
     );
