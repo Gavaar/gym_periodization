@@ -1,51 +1,45 @@
-import React from 'react';
 import './decreasing-number-button.css';
 
-interface DecreasingNumberConfig {
+interface DecreasingNumberProps {
     maxValue?: number;
+    value?: number;
+    onChange?: (newValue?: number) => void;
 }
 
-function propsMustHavePositiveMaxValue(props: DecreasingNumberConfig) {
-    const _props = { ...props };
-    if (!_props.maxValue) {
-        _props.maxValue = 5;
+function maxValueMustBePositive(maxValue: number | undefined) {
+    if (maxValue == null) {
+        return 5;
     }
-    if (_props.maxValue < 0) {
-        _props.maxValue = 0;
+    if (maxValue < 0) {
+        return 0;
     }
-    return _props;
+    return maxValue;
 }
 
-class DecreasingNumberButton extends React.Component<DecreasingNumberConfig, { value?: number }> {
-    private maxValue?: number;
+function DecreasingNumberButton({ onChange, value, maxValue: max }: DecreasingNumberProps) {
+    const maxValue = maxValueMustBePositive(max);
 
-    constructor(config: DecreasingNumberConfig) {
-        super(config);
-        this.state = {};
-        this.maxValue = propsMustHavePositiveMaxValue(config).maxValue;
+    const buttonClick = (): void => {
+        const newValue = nextButtonValue(value);
+        if (onChange) {
+            onChange(newValue);
+        }
     }
 
-    buttonClick(): void {
-        const newValue = this.nextButtonValue(this.state.value);
-        this.setState({ value: newValue });
-    }
-
-    render() {
-        return (
-            <button className="RoundButton"
-                onClick={() => this.buttonClick()}>
-                { this.state.value != null ? this.state.value : '' }
-            </button>
-        );
-    }
-
-    private nextButtonValue(previousValue?: number): number | undefined {
+    const nextButtonValue = (previousValue?: number): number | undefined => {
         if (previousValue == null) {
-            return this.maxValue;
+            return maxValue;
         } else if (!previousValue) {
             return;
         }
         return previousValue - 1;
     }
+
+    return (
+        <button className="RoundButton"
+            onClick={() => buttonClick()}>
+            {value}
+        </button>
+    );
 }
 export default DecreasingNumberButton;

@@ -1,0 +1,49 @@
+.Days {
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    overflow-x: auto;
+    width: fit-content;
+    padding-right: 0.5rem;
+}
+
+.Days__week-title {
+    display: flex;
+    justify-content: center;
+    box-shadow: 1px 0 0 0 var(--main);
+}
+
+.Days__week-days {
+    display: flex;
+    flex-flow: row-reverse;
+}
+
+.Days__day-wrapper {
+    width: 7rem;
+    position: relative;
+}
+
+.Days__day-delete {
+    display: none;
+    position: absolute;
+    right: -0.25rem;
+    top: -0.25rem;
+    border: 1px solid var(--contrast);
+    background: var(--main);
+    color: var(--contrast);
+    border-radius: 50%;
+    width: 0.7rem;
+    height: 1rem;
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 0.15rem 0.25rem 0;
+    cursor: pointer;
+}
+.Days__day-delete:hover {
+    transition: 0.25s;
+    color: var(--main);
+    background-color: var(--contrast);
+}
+
+.Days__day-wrapper:hover .Days__day-delete {
+    display: block;
+}

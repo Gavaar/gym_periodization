@@ -1,15 +1,65 @@
-.GymPeriodizator {
+:root {
+    --main: #ce1c1c;
     --main-light: #ce1c1ca8;
     --contrast: #fff;
-}
-
-.GymPeriodizator_exercise {
-    display: flex;
-    max-width: 16rem;
-    justify-content: space-between;
 }
 
 .full-center {
     display: flex;
     justify-content: center;
+}
+.delimiter {
+    width: 97.5%;
+    margin: 0 auto;
+    padding: 0;
+    border: 1px solid var(--main-light);
+    opacity: 0.5;
+}
+
+/* Gym Periodizaor */
+.GymPeriodizator {
+    height: 95vh;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+.GymPeriodizator__title {
+    flex: 0 0 content;
+    margin: 1rem 0;
+}
+.GymPeriodizator__body {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    flex: 1 1 0;
+    overflow: auto;
+}
+.GymPeriodizator__day-picker {
+    flex: 0 0 content;
+    overflow-x: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background-color: var(--main-light);
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--main);
+}
+
+@media screen and (min-width: 40rem) {
+    .GymPeriodizator__body {
+        overflow: hidden;
+    }
 }

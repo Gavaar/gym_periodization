@@ -1,0 +1,62 @@
+.ExerciseSet {
+    flex: 3 0 20rem;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.ExerciseSet__title {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.25rem;
+}
+
+.ExerciseSet__title-child {
+    flex: 1 0 0;
+}
+
+.ExerciseSet__date-input {
+    background: transparent;
+    border: 0;
+    font-size: 1.17rem;
+    font-weight: 700;
+    flex: 1 0 0;
+    text-align: end;
+    min-width: 0;
+    outline-color: var(--main-light);
+}
+
+.ExerciseSet__date-input:hover {
+    box-shadow: 0px 4px 3px -3px var(--main);
+    transition: 0.2s;
+}
+
+.ExerciseSet__reps {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.ExerciseSet__reps-exercise {
+    margin: 0.5rem 0;
+    min-height: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.ExerciseSet__reps-buttons {
+    display: flex;
+    justify-content: space-between;
+    max-width: 12rem;
+}
+.ExerciseSet__actions > button {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    padding: 0.35rem;
+    border: 1px solid var(--main);
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+.ExerciseSet__actions > button:hover {
+    background-color: var(--main-light);
+    color: var(--contrast);
+    transition: 0.35s;
+}

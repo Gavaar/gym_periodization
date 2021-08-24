@@ -1,0 +1,52 @@
+.Block {
+    cursor: pointer;
+    display: flex;
+    flex-flow: column nowrap;
+    border: 1px solid var(--main);
+    border-radius: 0.3rem;
+    padding: 0.5rem;
+    height: min-content;
+    margin: 0 0.5rem 0.5rem;
+    user-select: none;
+}
+.Block.selected, .Block:hover {
+    color: var(--contrast);
+    background-color: var(--main-light);
+    transition: 0.25s;
+}
+
+.Block.selected .delimiter, .Block:hover .delimiter {
+    border-color: var(--contrast);
+}
+
+.Block__title {
+    margin: 0;
+}
+
+.Block__exercise {
+    margin: 0.25rem 0;
+}
+
+.Block__week {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    margin: 0;
+}
+.Block__week-exercise {
+    flex: 3 0 0;
+}
+.Block__week-weight {
+    flex: 3 0 0;
+}
+.Block__week-successes {
+    display: flex;
+    flex: 2 0;
+    justify-content: space-evenly;
+    font-size: 0.8rem;
+}
+.Block__week-successes > span {
+    margin: 0 auto;
+    font-weight: 800;
+}
