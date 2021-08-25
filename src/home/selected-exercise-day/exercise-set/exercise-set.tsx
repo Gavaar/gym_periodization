@@ -71,7 +71,10 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
 
     const onChangeWeight = (event: React.ChangeEvent<HTMLInputElement>, exercise: Exercises) => {
         const _block = { ...blockData };
-        _block.exercise_configuration[exercise].medium_weight = +event.target.value;
+        let newWeight = +event.target.value;
+        if (day.rep_goal === 6 || day.rep_goal === 3) newWeight -= _block.exercise_configuration[exercise].modifier;
+        if (day.rep_goal === 4) newWeight += _block.exercise_configuration[exercise].modifier;
+        _block.exercise_configuration[exercise].medium_weight = newWeight;
         setBlockData(_block);
     }
 
@@ -85,13 +88,13 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
 
         <div className="ExerciseSet__reps">
             {dayExerciseBody?.map(exDay => {
-                const { key, title, repsAndSeries, exercise, seriesArray } = exDay;
+                const { key, title, repsAndSeries, weight, exercise, seriesArray } = exDay;
                 return (
                     <div key={key} className="ExerciseSet__reps-exercise">
                         <strong className="ExerciseSet__exercise-info">
                             <span>{title} ({repsAndSeries})</span>
                             <input className="ExerciseSet__input" type="number"
-                                value={blockData.exercise_configuration[exercise].medium_weight}
+                                value={weight}
                                 onChange={e => onChangeWeight(e, exercise)} />Kg
                         </strong>
                         <div className="ExerciseSet__reps-buttons">

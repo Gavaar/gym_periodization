@@ -32,7 +32,6 @@ export function useBlocks(ids: number[]): ExerciseBlock[] {
     const [blocks, setBlocks] = useState<ExerciseBlock[]>([]);
 
     useEffect(() => {
-        console.log({ ids });
         const idPromises = ids.map(id => getBlock(id));
         Promise.all(idPromises).then(blocks => {
             setBlocks(addNewBlockWhenLastIsFull(blocks));

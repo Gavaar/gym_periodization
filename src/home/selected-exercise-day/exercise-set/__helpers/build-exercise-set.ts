@@ -10,7 +10,7 @@ export default function buildExerciseSet(exerciseDay: ExerciseDay, exerciseBlock
     return (Object.keys(exercises) as Exercises[]).map((exercise: Exercises) => {
         const { series_goal, series } = exercises[exercise]!;
         const { medium_weight, modifier, failed_day_ids } = exerciseBlock.exercise_configuration[exercise];
-        const dayWeight = getDayWeight({ dayId: id, medium_weight, modifier, rep_goal, failed_day_ids });
+        const weight = getDayWeight({ dayId: id, medium_weight, modifier, rep_goal, failed_day_ids });
         const undoneArray = Array.from(Array(series_goal - series.length), () => undefined);
         const seriesArray = [...series, ...undoneArray].map((value, i) => {
             return {
@@ -23,10 +23,10 @@ export default function buildExerciseSet(exerciseDay: ExerciseDay, exerciseBlock
         return {
             exercise,
             seriesArray,
+            weight,
             key: `${exercise}_${id}`,
             title: snakeToTitle(exercise),
             repsAndSeries: `${rep_goal}x${series_goal}`,
-            weight: `${dayWeight}Kg`,
         };
     });
 }

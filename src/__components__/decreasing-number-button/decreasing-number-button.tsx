@@ -15,24 +15,23 @@ function maxValueMustBePositive(maxValue: number | undefined) {
     }
     return maxValue;
 }
+function nextButtonValue(previousValue?: number, maxValue?: number): number | undefined {
+    if (previousValue == null) {
+        return maxValue;
+    } else if (!previousValue) {
+        return;
+    }
+    return previousValue - 1;
+}
 
 function DecreasingNumberButton({ onChange, value, maxValue: max }: DecreasingNumberProps) {
     const maxValue = maxValueMustBePositive(max);
 
-    const buttonClick = (): void => {
-        const newValue = nextButtonValue(value);
+    function buttonClick(): void {
+        const newValue = nextButtonValue(value, maxValue);
         if (onChange) {
             onChange(newValue);
         }
-    }
-
-    const nextButtonValue = (previousValue?: number): number | undefined => {
-        if (previousValue == null) {
-            return maxValue;
-        } else if (!previousValue) {
-            return;
-        }
-        return previousValue - 1;
     }
 
     return (

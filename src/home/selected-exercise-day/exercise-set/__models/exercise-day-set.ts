@@ -5,7 +5,7 @@ export interface ExerciseDaySet {
     title: string;
     exercise: Exercises;
     repsAndSeries: string;
-    weight: string;
+    weight: number;
     seriesArray: {
         value?: number;
         serieKey: string;
