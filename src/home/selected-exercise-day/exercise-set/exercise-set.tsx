@@ -5,7 +5,7 @@ import DecreasingNumberButton from '__components__/decreasing-number-button/decr
 import Store from 'home/__helpers/store/store';
 import { User, useSetDay } from '../../__states';
 import buildResetState from './__helpers/build-reset-state';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { HomeProvider } from 'home/__states';
 import findFailedExercises from './__helpers/find-failed-exercises';
 import copyOfDayWithState from './__helpers/copy-day-with-state';
@@ -20,6 +20,7 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
     const [blockIds, setBlockIds] = useContext(HomeProvider);
     const [dayData, setDayData] = useDay(day);
     const [blockData, setBlockData] = useBlock(block);
+    const [weights, setWeight] = useState<{ [ex in Exercises]?: number }>({});
     const { id, rep_goal } = dayData;
     const { daySetState, dayExerciseBody, setDayBody } = useSetDay(dayData, blockData);
 
@@ -69,13 +70,18 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
         setDayData({ ...dayData, date: event.target.value });
     }
 
-    const onChangeWeight = (event: React.ChangeEvent<HTMLInputElement>, exercise: Exercises) => {
-        const _block = { ...blockData };
-        let newWeight = +event.target.value;
-        if (day.rep_goal === 6 || day.rep_goal === 3) newWeight -= _block.exercise_configuration[exercise].modifier;
-        if (day.rep_goal === 4) newWeight += _block.exercise_configuration[exercise].modifier;
-        _block.exercise_configuration[exercise].medium_weight = newWeight;
-        setBlockData(_block);
+    function onConfirmChangeWeight(exercise: Exercises) {
+        const { modifier } = blockData.exercise_configuration[exercise];
+        const oldWeight = dayExerciseBody.find(e => e.exercise === exercise)!.weight;
+        let newWeight = weights[exercise] || oldWeight;
+        if (day.rep_goal === 6 || day.rep_goal === 3) newWeight -= modifier;
+        if (day.rep_goal === 4) newWeight += modifier;
+        if (weights[exercise] !== oldWeight && window.confirm('Are you sure? This would change the whole block')) {
+            blockData.exercise_configuration[exercise]!.medium_weight = newWeight;
+            setBlockData(blockData); 
+        } else {
+            setWeight({ ...weights, [exercise]: oldWeight });
+        }
     }
 
     return (<article className="ExerciseSet">
@@ -94,8 +100,9 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
                         <strong className="ExerciseSet__exercise-info">
                             <span>{title} ({repsAndSeries})</span>
                             <input className="ExerciseSet__input" type="number"
-                                value={weight}
-                                onChange={e => onChangeWeight(e, exercise)} />Kg
+                                value={weights[exercise] || weight}
+                                onBlur={() => onConfirmChangeWeight(exercise)}
+                                onChange={e => setWeight({ ...weights, [exercise]: +e.target.value}) }/>Kg
                         </strong>
                         <div className="ExerciseSet__reps-buttons">
                             {seriesArray.map(serie => {
