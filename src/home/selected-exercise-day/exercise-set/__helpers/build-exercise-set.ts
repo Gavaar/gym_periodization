@@ -24,6 +24,7 @@ export default function buildExerciseSet(exerciseDay: ExerciseDay, exerciseBlock
             exercise,
             seriesArray,
             weight,
+            modifier,
             key: `${exercise}_${id}`,
             title: snakeToTitle(exercise),
             repsAndSeries: `${rep_goal}x${series_goal}`,

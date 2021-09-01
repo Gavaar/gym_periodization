@@ -14,11 +14,12 @@ function useTextInput(initValue: string) {
 interface TextInputProps {
     onBlur: (nv: string) => any;
     inputType?: 'text' | 'number';
-    value?: any;
+    value?: string;
     onChange?: (nv: string) => any;
+    disabled?: boolean;
 }
-export default function TextInput({ value, onBlur, onChange: onChangeProp, inputType = 'text' }: TextInputProps): JSX.Element {
-    const [inputState, setInputState] = useTextInput(value);
+export default function TextInput({ value, onBlur, onChange: onChangeProp, disabled, inputType = 'text' }: TextInputProps): JSX.Element {
+    const [inputState, setInputState] = useTextInput(value!);
 
     function triggerOnChange(ev: React.ChangeEvent<HTMLInputElement>) {
         const { value: targetValue } = ev.target;
@@ -33,6 +34,7 @@ export default function TextInput({ value, onBlur, onChange: onChangeProp, input
             type={inputType}
             onChange={triggerOnChange}
             onBlur={(e) => onBlur(e.target.value)}
-            value={inputState}/>
+            value={inputState}
+            disabled={disabled}/>
     );
 }

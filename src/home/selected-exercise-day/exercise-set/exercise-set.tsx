@@ -12,6 +12,7 @@ import copyOfDayWithState from './__helpers/copy-day-with-state';
 import useDay from 'home/__states/day';
 import useBlock from 'home/__states/block';
 import TextInput from '__components__/input-field/text-input-field/text-input-field';
+import LadderInput from '__components__/input-field/ladder-input-field/ladder-input-field';
 
 interface ExerciseSetProps { day: ExerciseDay; block: ExerciseBlock };
 function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
@@ -71,20 +72,21 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
         setDayData({ ...newDay, date: newDate });
     }
 
-    function onConfirmChangeWeight(newValue: string, exercise: Exercises) {
-        const { modifier } = blockData.exercise_configuration[exercise];
-        const oldWeight = dayExerciseBody.find(e => e.exercise === exercise)!.weight;
-        let newWeight = +newValue;
+    const onChangeWeight = (newWeight: number, exercise: Exercises) => {
+        const blockConfig = blockData.exercise_configuration[exercise];
 
-        if (newWeight !== oldWeight && window.confirm('Are you sure? This would change the whole block')) {
-            // weight for low weeks is lower than modifer, and for 3rd week is higher. So we normalize
-            if (day.rep_goal === 6 || day.rep_goal === 3) newWeight += modifier;
-            if (day.rep_goal === 4) newWeight -= modifier;
+        switch (day.rep_goal) {
+            case 6:
+            case 3:
+                newWeight += blockConfig.modifier;
+                break;
+            case 4:
+                newWeight -= blockConfig.modifier;
+                break;
+        }
 
-            blockData.exercise_configuration[exercise]!.medium_weight = newWeight;
-            setBlockData(blockData);
-            console.log(blockData);
-       }
+        blockData.exercise_configuration[exercise].medium_weight = newWeight;
+        setBlockData(blockData);
     }
 
     return (<article className="ExerciseSet">
@@ -97,13 +99,14 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
 
         <div className="ExerciseSet__reps">
             {dayExerciseBody?.map(exDay => {
-                const { key, title, repsAndSeries, weight, exercise, seriesArray } = exDay;
+                const { key, title, repsAndSeries, exercise, modifier, weight, seriesArray } = exDay;
                 return (
                     <div key={key} className="ExerciseSet__reps-exercise">
                         <strong className="ExerciseSet__exercise-info">
                             <span>{title} ({repsAndSeries})</span>
-                            <TextInput value={weight}
-                                onBlur={(nv) => onConfirmChangeWeight(nv, exercise)}
+                            <LadderInput value={weight}
+                                modifier={modifier}
+                                onChange={(nw) => onChangeWeight(nw, exercise)}
                             />
                         </strong>
                         <div className="ExerciseSet__reps-buttons">
