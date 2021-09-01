@@ -5,12 +5,13 @@ import DecreasingNumberButton from '__components__/decreasing-number-button/decr
 import Store from 'home/__helpers/store/store';
 import { User, useSetDay } from '../../__states';
 import buildResetState from './__helpers/build-reset-state';
-import React, { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { HomeProvider } from 'home/__states';
 import findFailedExercises from './__helpers/find-failed-exercises';
 import copyOfDayWithState from './__helpers/copy-day-with-state';
 import useDay from 'home/__states/day';
 import useBlock from 'home/__states/block';
+import TextInput from '__components__/input-field/text-input-field/text-input-field';
 
 interface ExerciseSetProps { day: ExerciseDay; block: ExerciseBlock };
 function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
@@ -20,7 +21,6 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
     const [blockIds, setBlockIds] = useContext(HomeProvider);
     const [dayData, setDayData] = useDay(day);
     const [blockData, setBlockData] = useBlock(block);
-    const [weights, setWeight] = useState<{ [ex in Exercises]?: number }>({});
     const { id, rep_goal } = dayData;
     const { daySetState, dayExerciseBody, setDayBody } = useSetDay(dayData, blockData);
 
@@ -66,22 +66,25 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
         setDayBody({ ...daySetState, [serieKey]: nv });
     }
 
-    const onChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDayData({ ...dayData, date: event.target.value });
+    const onChangeDate = (newDate: string) => {
+        const newDay = copyOfDayWithState(dayData, daySetState);
+        setDayData({ ...newDay, date: newDate });
     }
 
-    function onConfirmChangeWeight(exercise: Exercises) {
+    function onConfirmChangeWeight(newValue: string, exercise: Exercises) {
         const { modifier } = blockData.exercise_configuration[exercise];
         const oldWeight = dayExerciseBody.find(e => e.exercise === exercise)!.weight;
-        let newWeight = weights[exercise] || oldWeight;
-        if (day.rep_goal === 6 || day.rep_goal === 3) newWeight -= modifier;
-        if (day.rep_goal === 4) newWeight += modifier;
-        if (weights[exercise] !== oldWeight && window.confirm('Are you sure? This would change the whole block')) {
+        let newWeight = +newValue;
+
+        if (newWeight !== oldWeight && window.confirm('Are you sure? This would change the whole block')) {
+            // weight for low weeks is lower than modifer, and for 3rd week is higher. So we normalize
+            if (day.rep_goal === 6 || day.rep_goal === 3) newWeight += modifier;
+            if (day.rep_goal === 4) newWeight -= modifier;
+
             blockData.exercise_configuration[exercise]!.medium_weight = newWeight;
-            setBlockData(blockData); 
-        } else {
-            setWeight({ ...weights, [exercise]: oldWeight });
-        }
+            setBlockData(blockData);
+            console.log(blockData);
+       }
     }
 
     return (<article className="ExerciseSet">
@@ -89,7 +92,7 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
         <h3 className="ExerciseSet__title">
             <span className="ExerciseSet__title-child">{(id !== -1) ? `Exercise #${id}` : 'New Exercise'}</span>
             <span className="ExerciseSet__title-child">Rep goal: {rep_goal}</span>
-            <input className="ExerciseSet__input" value={dayData.date} onChange={onChangeDate} />
+            <TextInput value={dayData.date} onBlur={onChangeDate}/>
         </h3>
 
         <div className="ExerciseSet__reps">
@@ -99,10 +102,9 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
                     <div key={key} className="ExerciseSet__reps-exercise">
                         <strong className="ExerciseSet__exercise-info">
                             <span>{title} ({repsAndSeries})</span>
-                            <input className="ExerciseSet__input" type="number"
-                                value={weights[exercise] || weight}
-                                onBlur={() => onConfirmChangeWeight(exercise)}
-                                onChange={e => setWeight({ ...weights, [exercise]: +e.target.value}) }/>Kg
+                            <TextInput value={weight}
+                                onBlur={(nv) => onConfirmChangeWeight(nv, exercise)}
+                            />
                         </strong>
                         <div className="ExerciseSet__reps-buttons">
                             {seriesArray.map(serie => {

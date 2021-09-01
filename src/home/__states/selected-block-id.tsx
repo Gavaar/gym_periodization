@@ -6,7 +6,7 @@ function useSelectedBlockId(blocks: { id: number }[]) {
     
     useEffect(() => {
         if (blocks.length) {
-            const selectedBlockId = blocks[blocks.length - 1]?.id;
+            const selectedBlockId = blocks[0]?.id;
             setSelectedBlock(selectedBlockId);
         }
     }, [blocks]);

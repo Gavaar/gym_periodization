@@ -1,7 +1,6 @@
 .Blocks {
     display: flex;
-    flex-flow: column-reverse nowrap;
-    justify-content: end;
+    flex-flow: column nowrap;
     max-height: 100%;
     overflow: auto;
     padding: 0.5rem 0;
