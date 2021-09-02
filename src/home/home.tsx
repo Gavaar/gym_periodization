@@ -20,7 +20,7 @@ function Home(): JSX.Element {
     const root = document.documentElement;
     const colors = Object.keys(COLORS);
     const userStore = new Store<{ id: number; color: string }>('users');
-    const [color, setColor] = useState(userStore.get(1).color || COLORS.red);
+    const [color, setColor] = useState(userStore.get(1)?.color || COLORS.red);
 
     useEffect(() => {
         root.style.setProperty('--main', color);
