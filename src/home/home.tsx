@@ -20,12 +20,13 @@ function Home(): JSX.Element {
     const root = document.documentElement;
     const colors = Object.keys(COLORS);
     const userStore = new Store<User>('users');
-    const [color, setColor] = useState(userStore.get(1)?.color || COLORS.red);
+    const user = userStore.get(1);
+    const [color, setColor] = useState(user?.color || COLORS.red);
 
     useEffect(() => {
         root.style.setProperty('--main', color);
         root.style.setProperty('--main-light', `${color}a8`);
-        userStore.update(1, { id: 1, blockIds: [], color });
+        userStore.update(1, { ...user, id: 1, color });
         // eslint-disable-next-line
     }, [color, root.style]);
 
@@ -48,9 +49,6 @@ function Home(): JSX.Element {
                             onClick={() => setColor(hexColor)}>
                         </div>);
                     })}
-                    {/* <div className="GymPeriodizator__btn red" onClick={() => setColor(Colors.Red)}></div>
-                    <div className="GymPeriodizator__btn green" onClick={() => setColor(Colors.Green)}></div>
-                    <div className="GymPeriodizator__btn blue" onClick={() => setColor(Colors.Blue)}></div> */}
                 </h1>
                 <div className="GymPeriodizator__body">
                     <SelectedExerciseDay />
