@@ -1,5 +1,5 @@
 import './home.css';
-import { HomeContext } from './__states';
+import { HomeContext, User } from './__states';
 import { DaysContext } from './days/days.context';
 import { BlocksContext } from './blocks/blocks.context';
 import { SelectedBlock } from './__states';
@@ -19,13 +19,13 @@ const COLORS: { [color: string]: string } = {
 function Home(): JSX.Element {
     const root = document.documentElement;
     const colors = Object.keys(COLORS);
-    const userStore = new Store<{ id: number; color: string }>('users');
+    const userStore = new Store<User>('users');
     const [color, setColor] = useState(userStore.get(1)?.color || COLORS.red);
 
     useEffect(() => {
         root.style.setProperty('--main', color);
         root.style.setProperty('--main-light', `${color}a8`);
-        userStore.update(1, { id: 1, color });
+        userStore.update(1, { id: 1, blockIds: [], color });
         // eslint-disable-next-line
     }, [color, root.style]);
 

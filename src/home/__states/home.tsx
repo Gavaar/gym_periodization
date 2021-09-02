@@ -1,7 +1,7 @@
 import Store from "home/__helpers/store/store";
 import React, { Dispatch, useEffect, useState } from "react";
 
-export interface User { id: number; blockIds: number[] };
+export interface User { id: number; blockIds: number[]; color?: string };
 function useHome(): [number[], Dispatch<React.SetStateAction<number[]>>] {
     const [blockIds, setBlockIds] = useState<number[]>([]);
 
