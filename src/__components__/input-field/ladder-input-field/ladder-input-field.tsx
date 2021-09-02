@@ -29,9 +29,9 @@ export default function LadderInput({ value, modifier, onChange = () => {} }: La
 
     return (
         <div className="LadderInput">
-            <span className="LadderInput__handler" onClick={handleTake}>-</span>
+            <span className="LadderInput__handler" onClick={handleTake}>&#8722;</span>
             <span className="LadderInput__value">{ladderValue}</span>
-            <span className="LadderInput__handler" onClick={handleAdd}>+</span>
+            <span className="LadderInput__handler" onClick={handleAdd}>&#43;</span>
         </div>
     );
 }
