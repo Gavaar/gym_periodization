@@ -1,6 +1,5 @@
 import './days.css';
 import { ExerciseBlock } from "home/blocks/block/block.model";
-import Store from "home/__helpers/store/store";
 import { weekForDayIndex } from "../__states/days";
 import Day from "./day/day";
 import { ExerciseDay } from "./day/day.model";
@@ -8,21 +7,22 @@ import { useContext } from "react";
 import { DayContextProvider } from "./days.context";
 import { SelectedDayProvider } from "home/__states";
 import { HomeProvider } from 'home/__states';
+import { blockStore } from 'home/blocks/blocks.state';
+import { dayStore } from 'home/__states';
 
 export default function Days(): JSX.Element {
     const days = useContext(DayContextProvider);
     const [selectedDay, onSelectDay] = useContext(SelectedDayProvider);
     const [blockIds, setBlockIds] = useContext(HomeProvider);
 
-    const onDeleteDay = (id: number) => {
+    const onDeleteDay = async (id: number) => {
         if (window.confirm(`Are you sure to delete day #${id}?`)) {   
-            const dayStore = new Store<ExerciseDay>('days');
-            const blockStore = new Store<ExerciseBlock>('blocks');
-            const block = Object.values(blockStore.getList()).find(block => block.day_ids.includes(id))!;
+            const blocks = await blockStore.get() as ExerciseBlock[];
+            const block = Object.values(blocks!).find(block => block.day_ids.includes(id))!;
 
             if (block) {
-                dayStore.delete(id);
-                blockStore.update(block.id, { ...block, day_ids: block.day_ids.filter(d => d !== id)});
+                dayStore.delete(`${id}`);
+                blockStore.patch({ ...block, day_ids: block.day_ids.filter(d => d !== id)});
                 setBlockIds([...blockIds]);
             }   
         }

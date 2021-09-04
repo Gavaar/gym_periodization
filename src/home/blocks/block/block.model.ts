@@ -1,3 +1,5 @@
+import { orderExercisesInObject } from "home/__helpers/order-exercises/order-exercises";
+
 export type Exercises = 'squat' | 'bench_press' | 'overhead_press' | 'barbell_row' | 'deadlift';
 export type ExerciseConfiguration = {
     [exercise in Exercises]: {
@@ -24,12 +26,12 @@ const DEFAULT_CONFIG: ExerciseConfiguration = {
         medium_weight: 20,
         modifier: 2.5,
     },
-    barbell_row: {
+    bench_press: {
         failed_day_ids: [],
         medium_weight: 30,
         modifier: 2.5,
     },
-    bench_press: {
+    barbell_row: {
         failed_day_ids: [],
         medium_weight: 30,
         modifier: 2.5,
@@ -47,7 +49,7 @@ export class NewExerciseBlock implements ExerciseBlock {
     
     constructor(previousExerciseConfiguration?: ExerciseConfiguration) {
         const config = previousExerciseConfiguration || DEFAULT_CONFIG;
-        this.exercise_configuration = (Object.keys(config) as Exercises[])
+        this.exercise_configuration = (orderExercisesInObject(config))
             .reduce((newExerciseConfig, exerciseName: Exercises) => {
                 const { medium_weight, failed_day_ids, modifier } = config[exerciseName]!;
                 newExerciseConfig[exerciseName] = {

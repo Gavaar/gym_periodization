@@ -1,6 +1,6 @@
 interface BlockHeaderProps { blockId: number; }
 function BlockHeader({ blockId }: BlockHeaderProps): JSX.Element {
-    const title = blockId !== -1 ? `Block #${blockId}` : `New Block`;
+    const title = blockId !== -1 ? `Block #${`${blockId}`.substring(0, 7)}` : `New Block`;
 
     return (
         <div>

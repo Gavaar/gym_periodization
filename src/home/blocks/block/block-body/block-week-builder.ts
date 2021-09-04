@@ -1,6 +1,7 @@
 import { weekForDayIndex } from "home/__states/days";
 import snakeToTitle from "home/__helpers/snake-to-title/snake-to-title";
 import { ExerciseBlock, Exercises } from "../block.model";
+import { orderExercisesInObject } from "home/__helpers/order-exercises/order-exercises";
 
 interface BlockWeekParts {
     exerciseName: string;
@@ -10,7 +11,7 @@ interface BlockWeekParts {
     key: Exercises;
 }
 function blockWeekBuilder(block: ExerciseBlock): BlockWeekParts[] {
-    return (Object.keys(block.exercise_configuration) as Exercises[]).map(exercise => {
+    return (orderExercisesInObject(block.exercise_configuration)).map(exercise => {
         const { medium_weight, modifier, failed_day_ids } = block.exercise_configuration[exercise];
         const exerciseName = snakeToTitle(exercise);
         const weekSuccess: [boolean?, boolean?, boolean?, boolean?] = [true, true, true, true];

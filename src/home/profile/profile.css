@@ -1,0 +1,15 @@
+.Profile {
+    color: var(--main);
+    cursor: pointer;
+    height: 1.75rem;
+    width: 1.75rem;
+    border-radius: 50%;
+    border: 1px solid;
+    overflow: hidden;
+}
+
+.Profile__pic {
+    height: 2rem;
+    background-position: center;
+    background-size: 2.5rem;
+}
