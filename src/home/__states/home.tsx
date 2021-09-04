@@ -1,14 +1,16 @@
-import Store from "home/__helpers/store/store";
+import { FireStore } from "home/__helpers/store/firestore";
 import React, { Dispatch, useEffect, useState } from "react";
 
-export interface User { id: number; blockIds: number[]; color?: string };
+export interface User { blockIds: number[] };
+export const userStore = new FireStore<User>('user');
+
 function useHome(): [number[], Dispatch<React.SetStateAction<number[]>>] {
     const [blockIds, setBlockIds] = useState<number[]>([]);
 
     useEffect(() => {
-        const userStore = new Store<User>('users');
-        const { blockIds } = userStore.get(1) || { id: 1, blockIds: [] };
-        setBlockIds(blockIds);
+        userStore.get().then(user => {
+            setBlockIds((user as User)?.blockIds || [])
+        })
     }, []);
 
     return [blockIds, setBlockIds];

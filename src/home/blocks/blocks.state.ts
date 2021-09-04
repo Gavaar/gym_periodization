@@ -1,6 +1,8 @@
-import { blockStore } from "home/blocks/blocks.state";
+import { FireStore } from "home/__helpers/store/firestore";
 import { useEffect, useState } from "react";
 import { ExerciseBlock, NewExerciseBlock } from "../blocks/block/block.model";
+
+export const blockStore = new FireStore<ExerciseBlock>('exercises/blocks');
 
 function addNewBlockWhenLastIsFull(blocks: ExerciseBlock[]): ExerciseBlock[] {
     const lastBlock = blocks[0];

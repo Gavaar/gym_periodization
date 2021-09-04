@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	// user
+  	match /user/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    // config
+    match /config/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    
+    // exercises
+    match /exercises/{userId} {
+    	allow read, write: if request.auth.uid == userId;
+
+      // blocks
+      match /blocks/{document=**} {
+        allow read, write: if request.auth.uid == userId;
+      }
+      // days
+      match /days/{document=**} {
+        allow read, write: if request.auth.uid == userId;
+      }
+    }
+  }
+}

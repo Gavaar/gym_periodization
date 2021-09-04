@@ -1,12 +1,12 @@
 import './day.css';
-import { Exercises } from "home/blocks/block/block.model";
 import { ExerciseDay, exerciseShortName } from "./day.model";
 import { checkMark, failMark } from 'home/config';
+import { orderExercisesInObject } from 'home/__helpers/order-exercises/order-exercises';
 
 function Day({ day, selected }: { day: ExerciseDay; selected: boolean }): JSX.Element {
     return (<div className={'Day' + (selected ? ' selected' : '')}>
                 <strong className="full-center">{day.date}</strong>
-                {(Object.keys(day.exercises) as Exercises[]).map(ex => {
+                {(orderExercisesInObject(day.exercises)).map(ex => {
                     const { series } = day.exercises[ex]!;
 
                     return (<div key={ex} className="Day__exercise">

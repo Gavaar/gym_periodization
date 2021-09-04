@@ -2,10 +2,9 @@ import './exercise-set.css';
 import { ExerciseDay } from "home/days/day/day.model";
 import { ExerciseBlock, Exercises } from 'home/blocks/block/block.model';
 import DecreasingNumberButton from '__components__/decreasing-number-button/decreasing-number-button';
-import Store from 'home/__helpers/store/store';
-import { User, useSetDay } from '../../__states';
+import { useSetDay } from '../../__states';
 import buildResetState from './__helpers/build-reset-state';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { HomeProvider } from 'home/__states';
 import findFailedExercises from './__helpers/find-failed-exercises';
 import copyOfDayWithState from './__helpers/copy-day-with-state';
@@ -13,34 +12,60 @@ import useDay from 'home/__states/day';
 import useBlock from 'home/__states/block';
 import TextInput from '__components__/input-field/text-input-field/text-input-field';
 import LadderInput from '__components__/input-field/ladder-input-field/ladder-input-field';
+import { userStore, dayStore } from 'home/__states';
+import { blockStore } from 'home/blocks/blocks.state';
+import { ExerciseDaySet } from './__models/exercise-day-set';
+
+type VolumeState = { [key in Exercises]?: number } & { total?: number};
+function useVolume(daySetState: { [ex: string]: number | undefined }, dayExerciseBody: ExerciseDaySet[]): VolumeState {
+    const [volume, setVolume] = useState<VolumeState>({});
+
+    useEffect(() => {
+        const repsByExercise = Object.keys(daySetState).reduce((reps, key) => {
+                const ex = key.split('::')[0] as Exercises;
+                reps[ex] = (reps[ex] || 0) + (daySetState[key] || 0);
+                return reps;
+            }, {} as { [e in Exercises]: number });
+
+        const newVolume = dayExerciseBody.reduce((vol, { exercise, weight }) => {
+            const addedValue = (repsByExercise[exercise] || 0) * weight;
+            vol[exercise] = (vol[exercise] || 0) + addedValue;
+            vol.total = (vol.total || 0) + addedValue;
+            return vol;
+        }, {} as VolumeState);
+
+        setVolume(newVolume);
+    }, [daySetState, dayExerciseBody]);
+
+    return volume;
+}
 
 interface ExerciseSetProps { day: ExerciseDay; block: ExerciseBlock };
 function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
-    const dayStore = new Store<ExerciseDay>('days');
-    const blockStore = new Store<ExerciseBlock>('blocks');
-    const userStore = new Store<User>('users');
     const [blockIds, setBlockIds] = useContext(HomeProvider);
     const [dayData, setDayData] = useDay(day);
     const [blockData, setBlockData] = useBlock(block);
     const { id, rep_goal } = dayData;
     const { daySetState, dayExerciseBody, setDayBody } = useSetDay(dayData, blockData);
+    const volume = useVolume(daySetState, dayExerciseBody);
 
     const onReset = () => {
         const dayExerciseBody = buildResetState(dayData, blockData);
         setDayBody(dayExerciseBody);
     }
 
-    const onSave = () => {
+    const onSave = async () => {
         const refreshBlockIds = [...blockIds];
         const dayToSave: ExerciseDay = copyOfDayWithState(dayData, daySetState);
         const blockToSave: ExerciseBlock = { ...blockData };
         const failedExercisesFromDay: Exercises[] = findFailedExercises(dayToSave);
 
         if (dayData.id === -1) {
-            dayData.id = dayStore.create(dayToSave).id;
+            const newDay = await dayStore.patch(dayToSave);
+            dayData.id = newDay!.id;
             blockToSave.day_ids = Array.from(new Set([...blockData.day_ids, dayData.id]));
         } else {
-            dayStore.update(dayData.id, dayToSave);
+            await dayStore.patch(dayToSave);
         }
 
         (Object.keys(blockToSave.exercise_configuration) as Exercises[]).forEach(ex => {
@@ -53,14 +78,15 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
         });
 
         if (blockData.id === -1) {
-            blockData.id = blockStore.create(blockToSave).id;
+            const newBlock = await blockStore.patch(blockToSave);
+            blockData.id = newBlock!.id;
             refreshBlockIds.push(blockData.id);
-            userStore.update(1, { id: 1, blockIds: refreshBlockIds });
+            await userStore.patch({ blockIds: refreshBlockIds })
+            setBlockIds(refreshBlockIds);
         } else {
-            blockStore.update(blockData.id, blockToSave);
+            await blockStore.patch(blockToSave);
+            setBlockIds(refreshBlockIds);
         }
-
-        setBlockIds(refreshBlockIds);
     };
 
     const onChangeNumber = (serieKey: string, nv: number | undefined) => {
@@ -92,7 +118,7 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
     return (<article className="ExerciseSet">
         <hr className="delimiter" />
         <h3 className="ExerciseSet__title">
-            <span className="ExerciseSet__title-child">{(id !== -1) ? `Exercise #${id}` : 'New Exercise'}</span>
+            <span className="ExerciseSet__title-child">{(id !== -1) ? `Ex. #${`${id}`.substring(0, 5)}` : 'New Exercise'}</span>
             <span className="ExerciseSet__title-child">Rep goal: {rep_goal}</span>
             <TextInput value={dayData.date} onBlur={onChangeDate}/>
         </h3>
@@ -120,15 +146,19 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
                                     onChange={nv => onChangeNumber(serieKey, nv)}
                                 />
                             })}
+                            <i className="ExerciseSet__reps-volume">{volume[exercise] ? <span>Volume: {volume[exercise]}Kg</span> : null}</i>
                         </div>
                     </div>
                 );
             })}
         </div>
 
-        <div className="ExerciseSet__actions">
-            <button onClick={onReset}>Reset</button>
-            <button onClick={onSave}>Save</button>
+        <div className="ExerciseSet__footer">
+            <div className="ExerciseSet__actions">
+                <button onClick={onReset}>Reset</button>
+                <button onClick={onSave}>Save</button>
+            </div>
+            <i>{volume.total ? <span>Total: {volume.total}</span> : null}</i>
         </div>
     </article>);
 }

@@ -39,8 +39,21 @@
 }
 .ExerciseSet__reps-buttons {
     display: flex;
+}
+.ExerciseSet__reps-buttons .RoundButton {
+    margin-right: 1rem;
+}
+
+.ExerciseSet__reps-volume {
+    font-size: 0.75rem;
+    height: 1rem;
+    margin-top: auto;
+    margin-left: auto;
+}
+
+.ExerciseSet__footer {
+    display: flex;
     justify-content: space-between;
-    max-width: 12rem;
 }
 .ExerciseSet__actions > button {
     margin-right: 0.5rem;
