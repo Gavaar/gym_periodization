@@ -10,7 +10,7 @@ import Days from './days/days';
 import Profile from './profile/profile';
 import UserConfig from './user-config/user-config';
 
-const VERSION = '0.1.0';
+const VERSION = '0.1.1';
 
 function Home(): JSX.Element {
     return (
