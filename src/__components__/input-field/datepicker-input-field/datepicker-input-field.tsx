@@ -12,8 +12,15 @@ export default function DatepickerInput({ value, onSelect }: DatepickerInputProp
     const [presentationDate, setPresentationDate] = useState('');
 
     useEffect(() => {
-        const day = dateValue.getDate();
-        const month = dateValue.getMonth() + 1;
+        if (value !== presentationDate) {
+            const [day, month, year] = value.split('-');
+            setDateValue(new Date(+year, +month - 1, +day));
+        }
+    }, [value, presentationDate])
+
+    useEffect(() => {
+        const day = `0${dateValue.getDate()}`.substr(-2);
+        const month = `0${dateValue.getMonth() + 1}`.substr(-2);
         const year = dateValue.getFullYear();
         setPresentationDate(`${day}-${month}-${year}`);
     }, [dateValue, setPresentationDate]);
