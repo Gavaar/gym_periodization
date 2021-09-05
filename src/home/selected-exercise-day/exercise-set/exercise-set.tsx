@@ -10,11 +10,11 @@ import findFailedExercises from './__helpers/find-failed-exercises';
 import copyOfDayWithState from './__helpers/copy-day-with-state';
 import useDay from 'home/__states/day';
 import useBlock from 'home/__states/block';
-import TextInput from '__components__/input-field/text-input-field/text-input-field';
 import LadderInput from '__components__/input-field/ladder-input-field/ladder-input-field';
 import { userStore, dayStore } from 'home/__states';
 import { blockStore } from 'home/blocks/blocks.state';
 import { ExerciseDaySet } from './__models/exercise-day-set';
+import DatepickerInput from '__components__/input-field/datepicker-input-field/datepicker-input-field';
 
 type VolumeState = { [key in Exercises]?: number } & { total?: number};
 function useVolume(daySetState: { [ex: string]: number | undefined }, dayExerciseBody: ExerciseDaySet[]): VolumeState {
@@ -118,9 +118,9 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
     return (<article className="ExerciseSet">
         <hr className="delimiter" />
         <h3 className="ExerciseSet__title">
-            <span className="ExerciseSet__title-child">{(id !== -1) ? `Ex. #${`${id}`.substring(0, 5)}` : 'New Exercise'}</span>
-            <span className="ExerciseSet__title-child">Rep goal: {rep_goal}</span>
-            <TextInput value={dayData.date} onBlur={onChangeDate}/>
+            <span>{(id !== -1) ? `Ex. ${`${id}`.substring(0, 5)}` : 'New Exercise'}</span>
+            <span>Rep goal: {rep_goal}</span>
+            <DatepickerInput value={dayData.date} onSelect={onChangeDate} />
         </h3>
 
         <div className="ExerciseSet__reps">

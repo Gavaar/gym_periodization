@@ -1,0 +1,9 @@
+.react-datepicker__input-container {
+    width: unset;
+    cursor: pointer;
+}
+.react-datepicker__input-container:hover {
+    box-shadow: 0px 1px 0px var(--main);
+    padding: 0 0.5rem;
+    transition: 0.25s;
+}

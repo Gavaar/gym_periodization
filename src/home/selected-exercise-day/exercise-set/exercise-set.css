@@ -12,8 +12,7 @@
     font-size: 1rem;
     text-align: center;
 }
-
-.ExerciseSet__title-child {
+.ExerciseSet__title > * {
     flex: 1 0 0;
 }
 
