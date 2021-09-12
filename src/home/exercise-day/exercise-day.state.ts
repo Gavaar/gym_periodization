@@ -1,12 +1,12 @@
 import { ExerciseBlock } from "home/blocks/block/block.model";
-import { BlocksContextProvider } from "home/blocks/blocks.context";
+import { BlocksProvider } from "home/blocks/blocks.context";
 import { ExerciseDay } from "home/days/day/day.model";
 import { DaysProvider } from "home/days/days.context";
 import { useContext, useEffect, useState } from "react";
 
 export function useSelectedExerciseDay({ selectedDay, selectedBlock }: { selectedDay: number, selectedBlock: number }) {
-    const days = useContext(DaysProvider);
-    const blocks = useContext(BlocksContextProvider);
+    const [days] = useContext(DaysProvider);
+    const [blocks] = useContext(BlocksProvider);
     const [exDay, setExDay] = useState<{ day: ExerciseDay; block: ExerciseBlock }>({} as { day: ExerciseDay; block: ExerciseBlock });
 
     useEffect(() => {

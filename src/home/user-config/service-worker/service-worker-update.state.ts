@@ -1,5 +1,5 @@
 import { Dispatch, useEffect, useState } from "react";
-import ConfirmWithBanner from "__components__/confirm-banner/confirm-banner";
+import bannerConfirm from "__components__/confirm-banner/confirm-banner";
 import { register as serviceWorkerRegister } from 'serviceWorkerRegistration';
 
 type UpdaterFunction = () => Promise<void>;
@@ -8,7 +8,7 @@ export default function useServiceWorker(): [UpdaterFunction | undefined, Dispat
     const [triggerUpdate, setTriggerUpdate] = useState<UpdaterFunction | undefined>();
 
     async function updateVersion(registration: ServiceWorkerRegistration) {
-        const confirm = await ConfirmWithBanner('Update now?');
+        const confirm = await bannerConfirm('Update now?');
         if (confirm) { // 'SKIP_WAIT' is what serviceWorker expects
             registration.waiting?.postMessage({ type: 'SKIP_WAIT' });
         }
@@ -22,7 +22,9 @@ export default function useServiceWorker(): [UpdaterFunction | undefined, Dispat
         serviceWorkerRegister({
             onUpdate: (registration) => {
                 // we return a method that when called would prompt to update service worker;
-                const updateTrigger = () => (() => updateVersion(registration));
+                function updateTrigger() {
+                    return ()=>updateVersion(registration)
+                };
                 setTriggerUpdate(updateTrigger);
             }
         });

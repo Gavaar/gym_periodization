@@ -1,4 +1,4 @@
-import { BlocksContextProvider } from "home/blocks/blocks.context";
+import { BlocksProvider } from "home/blocks/blocks.context";
 import React, { Dispatch, useContext, useEffect, useState } from "react";
 
 function useSelectedBlockId(blocks: { id: number }[]) {
@@ -16,7 +16,7 @@ function useSelectedBlockId(blocks: { id: number }[]) {
 
 export const SelectedBlockProvider = React.createContext<[number, Dispatch<number>]>([-1, () => {}]);
 export function SelectedBlock({ children }: JSX.ElementChildrenAttribute): JSX.Element {
-    const blocks = useContext(BlocksContextProvider);
+    const [blocks] = useContext(BlocksProvider);
     const [selectedBlock, setSelectedBlock] = useSelectedBlockId(blocks);
 
     return (

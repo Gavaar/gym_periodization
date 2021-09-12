@@ -1,7 +1,7 @@
-import { weekForDayIndex } from "home/__states/days";
 import snakeToTitle from "home/__helpers/snake-to-title/snake-to-title";
 import { ExerciseBlock, Exercises } from "../block.model";
 import { orderExercisesInObject } from "home/__helpers/order-exercises/order-exercises";
+import { weekForDayIndex } from "home/days/days.state";
 
 interface BlockWeekParts {
     exerciseName: string;

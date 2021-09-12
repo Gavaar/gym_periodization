@@ -1,16 +1,16 @@
-import { HomeProvider } from "home/__states";
-import React, { useContext } from "react";
+import { UserProvider } from "home/user/user.context";
+import React, { Dispatch, useContext } from "react";
 import { ExerciseBlock } from "./block/block.model";
-import { useBlocks } from "../__states";
+import { useBlocks } from "./blocks.state";
 
-export const BlocksContextProvider = React.createContext<ExerciseBlock[]>([]);
+export const BlocksProvider = React.createContext<[ExerciseBlock[], Dispatch<ExerciseBlock[]>]>([[], ()=>{}]);
 
 export function BlocksContext({ children }: JSX.ElementChildrenAttribute): JSX.Element {
-    const [ids] = useContext(HomeProvider);
-    const blocks = useBlocks(ids);
+    const [user] = useContext(UserProvider);
+    const [blocks, setBlocks] = useBlocks(user?.blockIds);
     return (
-        <BlocksContextProvider.Provider value={blocks}>
+        <BlocksProvider.Provider value={[blocks, setBlocks]}>
             {children}
-        </BlocksContextProvider.Provider>
+        </BlocksProvider.Provider>
     );
 }

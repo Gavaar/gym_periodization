@@ -1,5 +1,5 @@
 import { FireStore } from "home/__helpers/store/firestore";
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { ExerciseDay } from "../days/day/day.model";
 import buildNewDay from "../days/__helpers/build-new-day";
 
@@ -18,21 +18,22 @@ function addNewDayIFAble(days: ExerciseDay[]): ExerciseDay[] {
     return days;
 }
 
-function getDays(id: number): Promise<ExerciseDay> {
+function getDay(id: number): Promise<ExerciseDay> {
     return dayStore.get(`${id}`) as Promise<ExerciseDay>;
 }
-export function useDays(ids: number[]): ExerciseDay[] {
-    const [days, setDay] = useState<ExerciseDay[]>([]);
+
+export function useDays(ids: number[]): [ExerciseDay[], Dispatch<ExerciseDay[]>] {
+    const [days, setDays] = useState<ExerciseDay[]>([]);
 
     useEffect(() => {
         const days: Promise<ExerciseDay>[] = [];
         ids.forEach(id => {
-            days.push(getDays(id));
+            days.push(getDay(id));
         });
         Promise.all(days).then(days => {
-            setDay(addNewDayIFAble(days));
+            setDays(addNewDayIFAble(days));
         });
-    }, [ids, setDay]);
+    }, [ids]);
 
-    return days;
+    return [days, setDays];
 }

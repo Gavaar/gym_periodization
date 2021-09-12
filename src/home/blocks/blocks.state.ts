@@ -1,5 +1,5 @@
 import { FireStore } from "home/__helpers/store/firestore";
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { ExerciseBlock, NewExerciseBlock } from "../blocks/block/block.model";
 
 export const blockStore = new FireStore<ExerciseBlock>('exercises/blocks');
@@ -21,15 +21,15 @@ function addNewBlockWhenLastIsFull(blocks: ExerciseBlock[]): ExerciseBlock[] {
 function getBlock(id: number): Promise<ExerciseBlock> {
     return blockStore.get(`${id}`) as Promise<ExerciseBlock>;
 }
-export function useBlocks(ids: number[]): ExerciseBlock[] {
+export function useBlocks(ids?: number[]): [ExerciseBlock[], Dispatch<ExerciseBlock[]>] {
     const [blocks, setBlocks] = useState<ExerciseBlock[]>([]);
 
     useEffect(() => {
-        const idPromises = ids.map(id => getBlock(id)).reverse();
+        const idPromises = (ids || []).map(id => getBlock(id)).reverse();
         Promise.all(idPromises).then(blocks => {
             setBlocks(addNewBlockWhenLastIsFull(blocks));
         });
     }, [ids]);
 
-    return blocks;
+    return [blocks, setBlocks];
 }

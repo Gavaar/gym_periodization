@@ -1,31 +1,32 @@
 import './days.css';
-import { ExerciseBlock } from "home/blocks/block/block.model";
-import { weekForDayIndex } from "../__states/days";
 import Day from "./day/day";
 import { ExerciseDay } from "./day/day.model";
-import { useContext } from "react";
+import { MouseEvent, useContext } from "react";
 import { DaysProvider } from "./days.context";
-import { SelectedDayProvider } from "home/__states";
-import { HomeProvider } from 'home/__states';
+import { SelectedBlockProvider, SelectedDayProvider } from "home/__states";
 import { blockStore } from 'home/blocks/blocks.state';
-import { dayStore } from 'home/__states';
-import ConfirmWithBanner from '__components__/confirm-banner/confirm-banner';
+import bannerConfirm from '__components__/confirm-banner/confirm-banner';
+import { dayStore, weekForDayIndex } from './days.state';
+import { UserProvider } from 'home/user/user.context';
+import { BlocksProvider } from 'home/blocks/blocks.context';
 
 export default function Days(): JSX.Element {
-    const days = useContext(DaysProvider);
+    const [days] = useContext(DaysProvider);
+    const [blocks] = useContext(BlocksProvider)
     const [selectedDay, onSelectDay] = useContext(SelectedDayProvider);
-    const [blockIds, setBlockIds] = useContext(HomeProvider);
+    const [selectedBlock] = useContext(SelectedBlockProvider);
+    const [user, setUser] = useContext(UserProvider);
 
-    const onDeleteDay = async (id: number) => {
-        const selection = await ConfirmWithBanner(`Are you sure to delete day #${id}?`);
+    const onDeleteDay = async (id: number, event: MouseEvent<HTMLElement>) => {
+        const selection = await bannerConfirm(`Are you sure to delete day #${id}?`, event);
         if (selection) {
-            const blocks = await blockStore.get() as ExerciseBlock[];
-            const block = Object.values(blocks!).find(block => block.day_ids.includes(id))!;
+            const block = blocks.find(block => block.id === selectedBlock)!;
 
             if (block) {
+                const updatedBLockIds =  block.day_ids.filter(d => d !== id);
+                blockStore.patch({ ...block, day_ids: updatedBLockIds });
                 dayStore.delete(`${id}`);
-                blockStore.patch({ ...block, day_ids: block.day_ids.filter(d => d !== id)});
-                setBlockIds([...blockIds]);
+                setUser({ ...user, blockIds: [...user.blockIds] });
             }
         }
     }
@@ -44,7 +45,7 @@ export default function Days(): JSX.Element {
                     <div className="Days__week-days">
                         {dayTuple.map(day =>
                             <div className="Days__day-wrapper" key={day?.id} onClick={() => onSelectDay(day!.id)}>
-                                {day?.id !== -1 && <strong className="Days__day-delete" onClick={() => onDeleteDay(day!.id)}>X</strong>}
+                                {day?.id !== -1 && <strong className="Days__day-delete" onClick={(e) => onDeleteDay(day!.id, e)}>X</strong>}
                                 <Day day={day!} selected={selectedDay === day?.id}/>
                             </div>
                         )}

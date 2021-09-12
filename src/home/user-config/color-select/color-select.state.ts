@@ -1,5 +1,5 @@
 import { FireStore } from "home/__helpers/store/firestore";
-import { UserProvider } from "home/__states/user";
+import { UserProvider } from "home/user/user.context";
 import { Dispatch, useContext, useEffect, useState } from "react";
 import { COLORS } from "./color-select.config";
 
@@ -13,20 +13,18 @@ function setRootColor(color = COLORS.red) {
     root.style.setProperty('--main-light', `${color}a8`);
 }
 
+const DEFAULT_CONFIG = { color: COLORS.red };
+
 const configStore = new FireStore<UserConfig>('config');
 
-export default function useColor() {
+export default function useColor(): [string | undefined, Dispatch<string>] {
     const [user] = useContext(UserProvider);
     const [selectedColor, setSelectedColor] = useState<string>();
 
     useEffect(() => {
         configStore.get().then((config) => {
-            const { color } = (config || {}) as UserConfig;
-            if (color) {
-                setSelectedColor(color);
-            } else {
-                setSelectedColor(COLORS.red);
-            }
+            const { color } = (config || DEFAULT_CONFIG) as UserConfig;
+            setSelectedColor(color);
         });
     }, [user]);
 
@@ -37,5 +35,5 @@ export default function useColor() {
         }
     }, [selectedColor]);
 
-    return  [selectedColor, setSelectedColor] as [string, Dispatch<string>];
+    return  [selectedColor, setSelectedColor];
 }

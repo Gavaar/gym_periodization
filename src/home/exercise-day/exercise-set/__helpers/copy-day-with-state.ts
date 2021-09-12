@@ -1,7 +1,7 @@
 import { Exercises } from "home/blocks/block/block.model";
 import { ExerciseDay } from "home/days/day/day.model";
 
-export default function copyOfDayWithState(originalDay: ExerciseDay, stateValues: { [ex: string]: number | undefined } ): ExerciseDay {
+export default function copyOfDayWithState(originalDay: ExerciseDay, stateValues: { [ex: string]: number | undefined }): ExerciseDay {
     const dayToSave: ExerciseDay = {
         ...originalDay,
         exercises: (Object.keys(originalDay.exercises) as Exercises[]).reduce((sum, ex) => {
@@ -10,7 +10,7 @@ export default function copyOfDayWithState(originalDay: ExerciseDay, stateValues
 
             sum[ex] = {
                 series_goal,
-                series: [...series, ...undoneSeries].map((_, i) => stateValues[`${ex}::${originalDay.id}::${i}`]!)
+                series: [...series, ...undoneSeries].map((_, i) => stateValues[`${ex}::${originalDay.id}::${i}`]!).filter(Boolean),
             };
             return sum;
         }, {} as ExerciseDay['exercises']),

@@ -2,7 +2,7 @@ import { SelectedBlockProvider } from "home/__states";
 import { SelectedDayProvider } from "home/__states";
 import { useContext } from "react";
 import ExerciseSet from "./exercise-set/exercise-set";
-import { useSelectedExerciseDay } from "../__states";
+import { useSelectedExerciseDay } from "./exercise-day.state";
 
 export default function SelectedExerciseDay(): JSX.Element {
     const [selectedBlock] = useContext(SelectedBlockProvider);

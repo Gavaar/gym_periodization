@@ -1,22 +1,22 @@
 import './home.css';
-import { HomeContext } from './__states';
 import { DaysContext } from './days/days.context';
 import { BlocksContext } from './blocks/blocks.context';
 import { SelectedBlock } from './__states';
 import { SelectedDay } from './__states';
-import SelectedExerciseDay from './selected-exercise-day/selected-exercise-day';
+import SelectedExerciseDay from './exercise-day/exercise-day';
 import Blocks from './blocks/blocks';
 import Days from './days/days';
 import Profile from './profile/profile';
 import UserConfig from './user-config/user-config';
-import { UserContext } from './__states/user';
+import { UserContext } from './user/user.context';
+import { AuthContext } from './auth/auth.context';
 
-const VERSION = '0.1.6aa';
+const VERSION = '0.1.7';
 
 function Home(): JSX.Element {
     return (
+        <AuthContext>
         <UserContext>
-        <HomeContext>
         <BlocksContext>
         <SelectedBlock>
         <DaysContext>
@@ -39,8 +39,8 @@ function Home(): JSX.Element {
         </DaysContext>
         </SelectedBlock>
         </BlocksContext>
-        </HomeContext>
         </UserContext>
+        </AuthContext>
     );
 }
 export default Home;

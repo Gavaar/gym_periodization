@@ -1,11 +1,11 @@
 import './blocks.css';
 import Block from "./block/block";
 import { useContext } from 'react';
-import { BlocksContextProvider } from './blocks.context';
+import { BlocksProvider } from './blocks.context';
 import { SelectedBlockProvider } from 'home/__states';
 
 function Blocks(): JSX.Element {
-    const blocks = useContext(BlocksContextProvider);
+    const [blocks] = useContext(BlocksProvider);
     const [selected, onSelect] = useContext(SelectedBlockProvider)
 
     return (

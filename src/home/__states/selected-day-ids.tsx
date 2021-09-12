@@ -16,7 +16,7 @@ function useSelectedDayId(days: { id: number }[]) {
 
 export const SelectedDayProvider = React.createContext<[number, Dispatch<number>]>([-1, () => {}]);
 export function SelectedDay({ children }: JSX.ElementChildrenAttribute): JSX.Element {
-    const days = useContext(DaysProvider);
+    const [days] = useContext(DaysProvider);
     const [selected, setSelected] = useSelectedDayId(days);
 
     return (

@@ -3,7 +3,7 @@ import { COLORS } from './color-select.config';
 
 const colors = Object.keys(COLORS);
 
-export default function ColorSelect({ color, onColorSelect }: { color: string, onColorSelect: (color: string) => any}): JSX.Element {
+export default function ColorSelect({ color, onColorSelect }: { color?: string, onColorSelect: (color: string) => any}): JSX.Element {
     return (
         <div className="ColorSelect">
             <span className="ColorSelect__title">App color</span>
