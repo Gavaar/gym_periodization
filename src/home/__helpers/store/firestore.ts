@@ -9,12 +9,13 @@ export class FireStore<T> {
         const userStore = new BackupStore<{ uid: string }>('loggedUser');
         return userStore.get()?.uid || NON_LOGGED_TOKEN;
     }
-
-    constructor(protected uri: string) {
-        const updateUri = this.uri.split('/');
+    private get uri(): string {
+        const updateUri = this.originalUri.split('/');
         updateUri.splice(1, 0, this.userUid);
-        this.uri = updateUri.join('/');
+        return updateUri.join('/');
     }
+
+    constructor(protected originalUri: string) {}
 
     async get(userId?: string): Promise<T | T[] | undefined> {
         if (this.isNotLoggedIn()) {

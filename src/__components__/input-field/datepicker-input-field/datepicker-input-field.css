@@ -7,3 +7,27 @@
     padding: 0 0.5rem;
     transition: 0.25s;
 }
+
+/* colors */
+.react-datepicker,
+.react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+    border-color: var(--main);
+}
+.react-datepicker__day--highlighted {
+    background-color: var(--main-light);
+}
+.react-datepicker__day--highlighted:hover,
+.react-datepicker__today-button:hover,
+.react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
+    background-color: var(--main);
+}
+.react-datepicker__today-button {
+    color: var(--contrast);
+    background-color: var(--main-light);
+}
+.react-datepicker__navigation-icon::before {
+    border-color: var(--main-light);
+}
+.react-datepicker__day-name, .react-datepicker__current-month {
+    color: var(--main);
+}

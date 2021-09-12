@@ -1,9 +1,9 @@
 @keyframes grow {
     from {
-        height: 0;
+        transform: scaleY(0) translateY(100%);
     }
     to {
-        height: 1.5rem;
+        transform: scaleY(1) translateY(0);
     }
 }
 
@@ -16,7 +16,7 @@
     padding: 1rem;
     border: 1px solid var(--main);
     background-color: var(--contrast);
-    animation: grow ease-in 0.5s;
+    animation: grow ease-in 0.1s;
 }
 
 .ConfirmBanner__message {

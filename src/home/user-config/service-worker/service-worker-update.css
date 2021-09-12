@@ -1,0 +1,11 @@
+.ServiceWorkerUpdate {
+    cursor: pointer;
+    color: var(--main);
+    text-align: center;
+    margin: 1rem 0 0;
+}
+.ServiceWorkerUpdate:hover {
+    background-color: var(--main);
+    color: var(--contrast);
+    transition: 0.2s;
+}

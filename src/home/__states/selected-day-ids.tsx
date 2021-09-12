@@ -1,4 +1,4 @@
-import { DayContextProvider } from "home/days/days.context";
+import { DaysProvider } from "home/days/days.context";
 import React, { Dispatch, useContext, useEffect, useState } from "react";
 
 function useSelectedDayId(days: { id: number }[]) {
@@ -16,7 +16,7 @@ function useSelectedDayId(days: { id: number }[]) {
 
 export const SelectedDayProvider = React.createContext<[number, Dispatch<number>]>([-1, () => {}]);
 export function SelectedDay({ children }: JSX.ElementChildrenAttribute): JSX.Element {
-    const days = useContext(DayContextProvider);
+    const days = useContext(DaysProvider);
     const [selected, setSelected] = useSelectedDayId(days);
 
     return (

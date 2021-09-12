@@ -1,32 +1,23 @@
 import './user-config.css';
-import { useState } from "react";
-import { COLORS } from './user-config.config';
-import useColor from './user-config.state';
+import ColorSelect from './color-select/color-select';
+import useColor from './color-select/color-select.state';
+import useOpenClose from './user-config.state';
+import useServiceWorker from './service-worker/service-worker-update.state';
+import ServiceWorkerUpdate from './service-worker/service-worker-update';
 
 export default function UserConfig() {
-    const [openClose, setOpenClose] = useState(false);
-    const [selectedColor, setSelectedColor] = useColor();
+    const [openClose, setOpenClose] = useOpenClose();
+    const [color, setColor] = useColor();
+    const [updateSW] = useServiceWorker();
 
-    const colors = Object.keys(COLORS);
-    
     return (
         <div className="UserConfig">
             <div className="UserConfig__icon" onClick={() => setOpenClose(!openClose)}>⚙</div>
+            {updateSW && <span className="UserConfig__notification" onClick={() => setOpenClose(!openClose)}>!</span>}
             {openClose &&
-                <ul className="UserConfig__list">
-                    <span>App color</span>
-                    <div className="UserConfig__color-options">
-                        {colors.map(col => {
-                            const hexColor = COLORS[col];
-                            const appendClass = hexColor === selectedColor ? ' selected' : ' ';
-
-                            return (<div
-                                key={col}
-                                className={'UserConfig__btn ' + col + appendClass}
-                                onClick={() => setSelectedColor(hexColor)}>
-                            </div>);
-                        })}
-                    </div>
+                <ul className="UserConfig__list" onClick={(e) => e.stopPropagation()}>
+                    <ColorSelect color={color} onColorSelect={setColor} />
+                    {updateSW && <ServiceWorkerUpdate onClickUpdate={updateSW} />}
                 </ul>}
         </div>
     );

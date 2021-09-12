@@ -1,6 +1,7 @@
 import './confirm-banner.css';
 import { checkMark, failMark } from "home/config";
 import { render, unmountComponentAtNode } from "react-dom";
+import addClickOutsideBehavior from '__components__/__helpers/click-outside-behavior';
 
 interface ConfirmBannerProps {
     message: string;
@@ -21,18 +22,35 @@ export default function ConfirmWithBanner(message: string): Promise<boolean> {
         return new Promise(() => {});
     }
 
-    return new Promise((resolve) => {
-        const div = document.createElement('div');
-        div.setAttribute('id', `confirm-banner-${message}`);
-        div.setAttribute('class', 'ConfirmBanner');
-        document.getElementById('root')!.appendChild(div);
+    function createBannerElement(elementType: string = 'div'): HTMLElement {
+        const element = document.createElement(elementType);
+        element.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+        element.setAttribute('id', `confirm-banner-${message}`);
+        element.setAttribute('class', 'ConfirmBanner');
+        return element;
+    }
 
-        function onSelectionMade(selection: boolean) {
-            unmountComponentAtNode(div);
-            div.remove();
-            resolve(selection);
+    function appendBannerToRoot(banner: HTMLElement, outOfElementClickCallback: (any?: any) => any) {
+        document.getElementById('root')!.appendChild(banner);
+        addClickOutsideBehavior(outOfElementClickCallback);
+    }
+
+    function createSelectionHandler(element: HTMLElement, resolveFunction: (val: any) => void) {
+        return function(selection: boolean) {
+            unmountComponentAtNode(element);
+            element.remove();
+            resolveFunction(selection);
         }
+    }
 
-        render(<ConfirmBanner message={message} onSelect={onSelectionMade} />, div);
+    return new Promise((resolve) => {
+        const banner = createBannerElement();
+        const onSelectionMade = createSelectionHandler(banner, resolve);
+        
+        appendBannerToRoot(banner, () => onSelectionMade(false));
+
+        render(<ConfirmBanner message={message} onSelect={onSelectionMade} />, banner);
     });
 }
