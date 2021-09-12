@@ -16,7 +16,7 @@
 
 /* Gym Periodizaor */
 .GymPeriodizator {
-    height: 95vh;
+    height: 99vh;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;

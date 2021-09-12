@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ExerciseDay } from "./day/day.model";
 import { useDays } from "../__states";
 
-export const DayContextProvider = React.createContext<ExerciseDay[]>([]);
+export const DaysProvider = React.createContext<ExerciseDay[]>([]);
 
 function useDayIds(blocks: ExerciseBlock[], selectedBlock: number): number[] {
     const [dayIds, setDayIds] = useState<number[]>([]);
@@ -24,8 +24,8 @@ export function DaysContext({ children }: JSX.ElementChildrenAttribute): JSX.Ele
 
     const days = useDays(dayIds);
     return (
-        <DayContextProvider.Provider value={days}>
+        <DaysProvider.Provider value={days}>
             {children}
-        </DayContextProvider.Provider>
+        </DaysProvider.Provider>
     );
 }

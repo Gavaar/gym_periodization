@@ -4,19 +4,21 @@ import { weekForDayIndex } from "../__states/days";
 import Day from "./day/day";
 import { ExerciseDay } from "./day/day.model";
 import { useContext } from "react";
-import { DayContextProvider } from "./days.context";
+import { DaysProvider } from "./days.context";
 import { SelectedDayProvider } from "home/__states";
 import { HomeProvider } from 'home/__states';
 import { blockStore } from 'home/blocks/blocks.state';
 import { dayStore } from 'home/__states';
+import ConfirmWithBanner from '__components__/confirm-banner/confirm-banner';
 
 export default function Days(): JSX.Element {
-    const days = useContext(DayContextProvider);
+    const days = useContext(DaysProvider);
     const [selectedDay, onSelectDay] = useContext(SelectedDayProvider);
     const [blockIds, setBlockIds] = useContext(HomeProvider);
 
     const onDeleteDay = async (id: number) => {
-        if (window.confirm(`Are you sure to delete day #${id}?`)) {   
+        const selection = await ConfirmWithBanner(`Are you sure to delete day #${id}?`);
+        if (selection) {
             const blocks = await blockStore.get() as ExerciseBlock[];
             const block = Object.values(blocks!).find(block => block.day_ids.includes(id))!;
 
@@ -24,7 +26,7 @@ export default function Days(): JSX.Element {
                 dayStore.delete(`${id}`);
                 blockStore.patch({ ...block, day_ids: block.day_ids.filter(d => d !== id)});
                 setBlockIds([...blockIds]);
-            }   
+            }
         }
     }
 

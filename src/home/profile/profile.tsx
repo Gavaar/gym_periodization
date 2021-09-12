@@ -1,9 +1,10 @@
 import './profile.css';
 import { getAuth, onAuthStateChanged, UserCredential } from "@firebase/auth";
 import login from "home/profile/login";
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import BackupStore from 'home/__helpers/store/backup-store';
 import logout from './logout';
+import ConfirmWithBanner from '__components__/confirm-banner/confirm-banner';
 
 const userStore = new BackupStore<Partial<UserCredential['user']>>('loggedUser');
 
@@ -23,22 +24,25 @@ export default function Profile(): JSX.Element {
         );
     }, []);
 
-    function loginUser(): void {
-        login().then(result => {
+    async function loginUser(): Promise<void> {
+        try {
+            const result = await login();
             const { uid, photoURL } = result.user;
             setUser({ uid, photoURL });
             userStore.set({ uid, photoURL });
-        }).catch(error => {
-            console.error(error);
-        });
+        } catch (e) {
+            console.error(e);
+        }
     }
 
-    function logoutUser(): void {
-        if (window.confirm('Sign out?')) {
+    async function logoutUser(event: MouseEvent<HTMLDivElement>): Promise<void> {
+        event.stopPropagation();
+        const selection = await ConfirmWithBanner('Sign out?');
+        if (selection) {
             logout().then(() => {
-                setUser(undefined);
                 userStore.delete();
-            });
+                setUser(undefined);
+            });  
         }
     }
 

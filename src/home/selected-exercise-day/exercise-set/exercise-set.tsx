@@ -15,6 +15,7 @@ import { userStore, dayStore } from 'home/__states';
 import { blockStore } from 'home/blocks/blocks.state';
 import { ExerciseDaySet } from './__models/exercise-day-set';
 import DatepickerInput from '__components__/input-field/datepicker-input-field/datepicker-input-field';
+import { DaysProvider } from 'home/days/days.context';
 
 type VolumeState = { [key in Exercises]?: number } & { total?: number};
 function useVolume(daySetState: { [ex: string]: number | undefined }, dayExerciseBody: ExerciseDaySet[]): VolumeState {
@@ -40,8 +41,18 @@ function useVolume(daySetState: { [ex: string]: number | undefined }, dayExercis
     return volume;
 }
 
+function useDayDates(days: ExerciseDay[]) {
+    const [dayDates, setDayDates] = useState<string[]>([]);
+    useEffect(() => {
+        setDayDates(days.filter(d => +d.id !== -1).map(d => d.date))
+    }, [days])
+    return [dayDates];
+}
+
 interface ExerciseSetProps { day: ExerciseDay; block: ExerciseBlock };
 function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
+    const days = useContext(DaysProvider);
+    const [dayDates] = useDayDates(days);
     const [blockIds, setBlockIds] = useContext(HomeProvider);
     const [dayData, setDayData] = useDay(day);
     const [blockData, setBlockData] = useBlock(block);
@@ -120,7 +131,7 @@ function ExerciseSet({ day, block }: ExerciseSetProps): JSX.Element {
         <h3 className="ExerciseSet__title">
             <span>{(id !== -1) ? `Ex. ${`${id}`.substring(0, 5)}` : 'New Exercise'}</span>
             <span>Rep goal: {rep_goal}</span>
-            <DatepickerInput value={dayData.date} onSelect={onChangeDate} />
+            <DatepickerInput value={dayData.date} onSelect={onChangeDate} highlightDays={dayDates} />
         </h3>
 
         <div className="ExerciseSet__reps">

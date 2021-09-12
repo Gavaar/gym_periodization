@@ -9,11 +9,13 @@ import Blocks from './blocks/blocks';
 import Days from './days/days';
 import Profile from './profile/profile';
 import UserConfig from './user-config/user-config';
+import { UserContext } from './__states/user';
 
-const VERSION = '0.1.1b';
+const VERSION = '0.1.6aa';
 
 function Home(): JSX.Element {
     return (
+        <UserContext>
         <HomeContext>
         <BlocksContext>
         <SelectedBlock>
@@ -22,7 +24,7 @@ function Home(): JSX.Element {
             <section className="GymPeriodizator">
                 <h1 className="GymPeriodizator__title full-center">
                     <Profile />
-                    <span>Gym Periodization v.{VERSION}</span>
+                    <span>Periodization v.{VERSION}</span>
                     <UserConfig />
                 </h1>
                 <div className="GymPeriodizator__body">
@@ -38,6 +40,7 @@ function Home(): JSX.Element {
         </SelectedBlock>
         </BlocksContext>
         </HomeContext>
+        </UserContext>
     );
 }
 export default Home;
