@@ -4,7 +4,7 @@ import { useContext } from "react";
 import ExerciseSet from "./exercise-set/exercise-set";
 import { useSelectedExerciseDay } from "./exercise-day.state";
 
-export default function SelectedExerciseDay(): JSX.Element {
+export default function ExerciseDay(): JSX.Element {
     const [selectedBlock] = useContext(SelectedBlockProvider);
     const [selectedDay] = useContext(SelectedDayProvider);
     const { day, block } = useSelectedExerciseDay({ selectedDay, selectedBlock })!;

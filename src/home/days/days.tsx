@@ -20,10 +20,13 @@ export default function Days(): JSX.Element {
     const onDeleteDay = async (id: number, event: MouseEvent<HTMLElement>) => {
         const selection = await bannerConfirm(`Are you sure to delete day #${id}?`, event);
         if (selection) {
-            const block = blocks.find(block => block.id === selectedBlock)!;
+            const block = blocks.find(block => block.id === selectedBlock);
 
             if (block) {
                 const updatedBLockIds =  block.day_ids.filter(d => d !== id);
+                Object.values(block.exercise_configuration).forEach(exConfig => {
+                    exConfig.failed_day_ids = exConfig.failed_day_ids.filter(d => d !== id);
+                });
                 blockStore.patch({ ...block, day_ids: updatedBLockIds });
                 dayStore.delete(`${id}`);
                 setUser({ ...user, blockIds: [...user.blockIds] });
