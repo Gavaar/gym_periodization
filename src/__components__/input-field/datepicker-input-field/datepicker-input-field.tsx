@@ -2,6 +2,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker-input-field.css";
 import React, { forwardRef, useEffect, useState } from "react";
 import Datepicker from "react-datepicker";
+import stringToDate from "home/__helpers/date/string-to-date";
+import dateToString from "home/__helpers/date/date-to-string";
 
 function useHighlightDates(highlightDays: string[] = []): [Date[]] {
     const [highlightDates, setHighlightDates] = useState<Date[]>([])
@@ -13,18 +15,13 @@ function useHighlightDates(highlightDays: string[] = []): [Date[]] {
     return [highlightDates];
 }
 
-function stringToDate(string: string): Date {
-    const [day, month, year] = string.split('-');
-    return new Date(+year, +month - 1, +day);
-}
-
 interface DatepickerInputProps {
     value: string;
     onSelect: (nd: string) => any;
     highlightDays: string[];
 }
 export default function DatepickerInput({ value, highlightDays, onSelect }: DatepickerInputProps) {
-    const [dateValue, setDateValue] = useState(new Date(value));
+    const [dateValue, setDateValue] = useState(stringToDate(value));
     const [highlightDates] = useHighlightDates(highlightDays);
     const [presentationDate, setPresentationDate] = useState('');
 
@@ -36,10 +33,7 @@ export default function DatepickerInput({ value, highlightDays, onSelect }: Date
     }, [value]);
 
     useEffect(() => {
-        const day = `0${dateValue.getDate()}`.substr(-2);
-        const month = `0${dateValue.getMonth() + 1}`.substr(-2);
-        const year = dateValue.getFullYear();
-        setPresentationDate(`${day}-${month}-${year}`);
+        setPresentationDate(dateToString(dateValue));
     }, [dateValue, setPresentationDate]);
 
     useEffect(() => {

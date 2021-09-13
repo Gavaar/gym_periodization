@@ -11,7 +11,7 @@ import UserConfig from './user-config/user-config';
 import { UserContext } from './user/user.context';
 import { AuthContext } from './auth/auth.context';
 
-const VERSION = '0.1.7';
+const VERSION = '0.1.8';
 
 function Home(): JSX.Element {
     return (

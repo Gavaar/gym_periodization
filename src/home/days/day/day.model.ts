@@ -1,4 +1,5 @@
 import { Exercises } from "home/blocks/block/block.model";
+import dateToString from "home/__helpers/date/date-to-string";
 
 export interface ExerciseDay {
     id: number;
@@ -22,10 +23,7 @@ export const exerciseShortName: { [exer in Exercises]: string } = {
 
 function buildNewDate() {
     const newDate = new Date();
-    const year = newDate.getFullYear();
-    const month = `0${newDate.getMonth() + 1}`.substr(-2);
-    const day = `0${newDate.getDate()}`.substr(-2);
-    return `${day}-${month}-${year}`;
+    return dateToString(newDate);
 }
 
 interface NewDayConfig {
