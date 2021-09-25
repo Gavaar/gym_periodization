@@ -1,6 +1,6 @@
 import { ExerciseBlock } from "home/blocks/block/block.model";
 import { BlocksProvider } from "home/blocks/blocks.context";
-import { SelectedBlockProvider } from "home/__states";
+import { SelectedBlockIdProvider } from "home/blocks/selected-block-id";
 import React, { Dispatch, useContext, useEffect, useState } from "react";
 import { ExerciseDay } from "./day/day.model";
 import { useDays } from "./days.state";
@@ -19,7 +19,7 @@ function useDayIds(blocks: ExerciseBlock[], selectedBlock: number): [number[], D
 
 export function DaysContext({ children }: JSX.ElementChildrenAttribute): JSX.Element {
     const [blocks] = useContext(BlocksProvider);
-    const [selectedBlock] = useContext(SelectedBlockProvider);
+    const [selectedBlock] = useContext(SelectedBlockIdProvider);
     const [dayIds] = useDayIds(blocks, selectedBlock);
     const [days, setDays] = useDays(dayIds);
 

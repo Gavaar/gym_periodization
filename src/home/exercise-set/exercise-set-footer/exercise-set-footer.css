@@ -1,0 +1,18 @@
+.ExerciseSetFooter {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ExerciseSetFooter__actions > button {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    padding: 0.35rem;
+    border: 1px solid var(--main);
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+.ExerciseSetFooter__actions > button:hover {
+    background-color: var(--main-light);
+    color: var(--contrast);
+    transition: 0.35s;
+}

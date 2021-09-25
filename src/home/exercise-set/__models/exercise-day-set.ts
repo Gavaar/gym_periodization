@@ -1,5 +1,11 @@
 import { Exercises } from "home/blocks/block/block.model";
 
+export interface SeriesExerciseDaySet {
+    value?: number;
+    serieKey: string;
+    maxValue: number;
+}
+
 export interface ExerciseDaySet {
     key: string;
     title: string;
@@ -7,9 +13,5 @@ export interface ExerciseDaySet {
     repsAndSeries: string;
     weight: number;
     modifier: number;
-    seriesArray: {
-        value?: number;
-        serieKey: string;
-        maxValue: number;
-    }[];
+    seriesArray: SeriesExerciseDaySet[];
 }

@@ -1,0 +1,19 @@
+.ExerciseSetBody {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.ExerciseSetBody__exercise-info {
+    display: flex;
+}
+.ExerciseSetBody__exercise-info > * {
+    flex: 1 0 0;
+}
+
+.ExerciseSetBody__exercise {
+    margin: 0.5rem 0;
+    min-height: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}

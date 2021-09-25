@@ -37,3 +37,9 @@
 .ColorSelect__btn.blue.selected {
     background-color: #1c37ce;
 }
+.ColorSelect__btn.magenta {
+    border-color: #b00b69a8;
+}
+.ColorSelect__btn.magenta.selected {
+    background-color: #b00b69;
+}

@@ -1,0 +1,10 @@
+.ExerciseSetHeader {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.25rem;
+    font-size: 1rem;
+    text-align: center;
+}
+.ExerciseSetHeader > * {
+    flex: 1 0 0;
+}

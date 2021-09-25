@@ -14,14 +14,14 @@ function useSelectedBlockId(blocks: { id: number }[]) {
     return [selectedBlock, setSelectedBlock] as [number, Dispatch<number>];
 }
 
-export const SelectedBlockProvider = React.createContext<[number, Dispatch<number>]>([-1, () => {}]);
-export function SelectedBlock({ children }: JSX.ElementChildrenAttribute): JSX.Element {
+export const SelectedBlockIdProvider = React.createContext<[number, Dispatch<number>]>([-1, () => {}]);
+export function SelectedBlockId({ children }: JSX.ElementChildrenAttribute): JSX.Element {
     const [blocks] = useContext(BlocksProvider);
     const [selectedBlock, setSelectedBlock] = useSelectedBlockId(blocks);
 
     return (
-        <SelectedBlockProvider.Provider value={[selectedBlock, setSelectedBlock]}>
+        <SelectedBlockIdProvider.Provider value={[selectedBlock, setSelectedBlock]}>
             {children}
-        </SelectedBlockProvider.Provider>
+        </SelectedBlockIdProvider.Provider>
     );
 }

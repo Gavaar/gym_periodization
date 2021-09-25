@@ -1,0 +1,6 @@
+.ExerciseSet {
+    flex: 3 0 20rem;
+    overflow-y: auto;
+    max-height: 100%;
+    padding: 0 0.5rem 0.5rem;
+}

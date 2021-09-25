@@ -14,14 +14,14 @@ function useSelectedDayId(days: { id: number }[]) {
     return [selectedDay, setSelectedDay] as [number, Dispatch<number>];
 }
 
-export const SelectedDayProvider = React.createContext<[number, Dispatch<number>]>([-1, () => {}]);
-export function SelectedDay({ children }: JSX.ElementChildrenAttribute): JSX.Element {
+export const SelectedDayIdProvider = React.createContext<[number, Dispatch<number>]>([-1, () => {}]);
+export function SelectedDayId({ children }: JSX.ElementChildrenAttribute): JSX.Element {
     const [days] = useContext(DaysProvider);
     const [selected, setSelected] = useSelectedDayId(days);
 
     return (
-        <SelectedDayProvider.Provider value={[selected, setSelected]}>
+        <SelectedDayIdProvider.Provider value={[selected, setSelected]}>
             {children}
-        </SelectedDayProvider.Provider>
+        </SelectedDayIdProvider.Provider>
     );
 }

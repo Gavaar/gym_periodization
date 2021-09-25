@@ -3,18 +3,19 @@ import Day from "./day/day";
 import { ExerciseDay } from "./day/day.model";
 import { MouseEvent, useContext } from "react";
 import { DaysProvider } from "./days.context";
-import { SelectedBlockProvider, SelectedDayProvider } from "home/__states";
 import { blockStore } from 'home/blocks/blocks.state';
 import bannerConfirm from '__components__/confirm-banner/confirm-banner';
 import { dayStore, weekForDayIndex } from './days.state';
 import { UserProvider } from 'home/user/user.context';
 import { BlocksProvider } from 'home/blocks/blocks.context';
+import { SelectedDayIdProvider } from './selected-day-id';
+import { SelectedBlockIdProvider } from 'home/blocks/selected-block-id';
 
 export default function Days(): JSX.Element {
     const [days] = useContext(DaysProvider);
     const [blocks] = useContext(BlocksProvider)
-    const [selectedDay, onSelectDay] = useContext(SelectedDayProvider);
-    const [selectedBlock] = useContext(SelectedBlockProvider);
+    const [selectedDay, onSelectDay] = useContext(SelectedDayIdProvider);
+    const [selectedBlock] = useContext(SelectedBlockIdProvider);
     const [user, setUser] = useContext(UserProvider);
 
     const onDeleteDay = async (id: number, event: MouseEvent<HTMLElement>) => {
